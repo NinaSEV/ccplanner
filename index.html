@@ -145,8 +145,8 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#faf8ff;height:100vh;
 .time-col-head{height:50px;flex-shrink:0;border-bottom:1.5px solid var(--border)}
 .tscroll{flex:1;overflow-y:auto}
 .tscroll::-webkit-scrollbar{display:none}
-.tslot{height:54px;position:relative;display:flex;align-items:flex-start;justify-content:flex-end;padding-right:8px}
-.tslot span{font-size:9.5px;color:var(--txt3);font-weight:500;transform:translateY(-50%);display:block}
+.tslot{height:54px;display:flex;align-items:flex-start;justify-content:flex-end;padding-right:8px;padding-top:2px}
+.tslot span{font-size:9.5px;color:var(--txt3);font-weight:500}
 .days-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .days-head{display:flex;border-bottom:1.5px solid var(--border);flex-shrink:0;background:var(--bg)}
 .dhcell{flex:1;min-width:0;padding:7px 4px;text-align:center;border-right:1px solid var(--border)}
@@ -299,7 +299,6 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:#faf8ff;height:100vh;
       <div class="time-col">
         <div class="time-col-head"></div>
         <div class="tscroll" id="tscroll">
-          <div class="tslot" style="height:0"></div>
           <div class="tslot"><span>05:00</span></div><div class="tslot"><span>06:00</span></div>
           <div class="tslot"><span>07:00</span></div><div class="tslot"><span>08:00</span></div>
           <div class="tslot"><span>09:00</span></div><div class="tslot"><span>10:00</span></div>
@@ -408,7 +407,7 @@ const COLORS=[
 ];
 const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const H_START=5, HH=54;
+const H_START=4, HH=54;
 
 // State
 let curWS='personal', wkOff=0, editTaskId=null, editEvId=null, nid=200;
@@ -473,8 +472,8 @@ function isToday(d){const n=new Date(2026,2,30);return d.getDate()===n.getDate()
 function snapH(h){return Math.round(h*4)/4;}
 function fmtH(h){const hh=Math.floor(h),mm=Math.round((h%1)*60);return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;}
 function parseH(s){const[h,m]=s.split(':').map(Number);return h+m/60;}
-function hourToPx(h){return (h-H_START)*HH+HH/2;}
-function pxToHour(px){return H_START+(px-HH/2)/HH;}
+function hourToPx(h){return (h-H_START)*HH+27;}
+function pxToHour(px){return H_START+(px-27)/HH;}
 function getWkNum(d){const j=new Date(d.getFullYear(),0,1);return Math.ceil(((d-j)/86400000+j.getDay()+1)/7);}
 function repeatIcon(r){return r==='daily'?'↻ daily':r==='weekly'?'↻ weekly':r==='monthly'?'↻ monthly':'';}
 function getColor(id){return COLORS.find(c=>c.id===id)||COLORS[0];}
@@ -805,7 +804,7 @@ function syncScroll(){
   const ts=document.getElementById('tscroll'),ds=document.getElementById('dscroll');
   ts.onscroll=()=>ds.scrollTop=ts.scrollTop;
   ds.onscroll=()=>ts.scrollTop=ds.scrollTop;
-  setTimeout(()=>{const s=(6-H_START)*HH+HH/2;ds.scrollTop=s;ts.scrollTop=s;},60);
+  setTimeout(()=>{const s=(6-H_START)*HH+27;ds.scrollTop=s;ts.scrollTop=s;},60);
 }
 function shiftWeek(d){wkOff+=d;renderSidebar();if(curView==='cal')renderCal();else if(curView==='week')renderWeeklyView();}
 function getWkNum(d){const j=new Date(d.getFullYear(),0,1);return Math.ceil(((d-j)/86400000+j.getDay()+1)/7);}
